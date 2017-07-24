@@ -24,7 +24,7 @@ class MyWindow < Window
     @colorMint = 0x8000ffbb
     @colorBrightPurple = 0x80ff00ff
     @player1 = Player.new
-    @floor1 = Gosu::Image.new("img/floor_checker_1.jpg")
+    @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
   end
@@ -45,6 +45,15 @@ class MyWindow < Window
   #   draw_rect(0, 560, WINDOW_WIDTH, 20, 0x8000aabb)
   #   draw_rect(0, 580, WINDOW_WIDTH, 20, 0x8000aabb)
   # end
+
+  def draw_floor
+    corner = 0
+    6.times do |i|
+      6.times do |j|
+        @floor1.draw(i*128, j*128, 0) # top row
+      end
+    end
+  end
 
   def draw_wall
     corner = 0
@@ -74,6 +83,8 @@ class MyWindow < Window
       @player1.y_vel = -5
     when Gosu::KbDown
       @player1.y_vel = 5
+    when Gosu::KbEscape
+      self.close!
     end
   end
 
@@ -96,7 +107,8 @@ class MyWindow < Window
   end
 
   def draw ### DRAW ##################################
-    draw_rect(0, 0, 768, 768, 0x400000ff)       # sky
+    # draw_rect(0, 0, 768, 768, 0x400000ff)       # sky
+    draw_floor
     draw_wall
     @player1.draw(0x90ff0000)
   end
