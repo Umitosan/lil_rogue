@@ -23,7 +23,7 @@ class MyWindow < Window
     @colorOrange = 0x80ff9900
     @colorMint = 0x8000ffbb
     @colorBrightPurple = 0x80ff00ff
-    @player1 = Player.new
+    @player1 = Player.new(320,320)
     @enemy1 = Enemy.new(193,193)
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
@@ -111,7 +111,7 @@ class MyWindow < Window
     draw_floor
     draw_wall
     @enemy1.draw
-    @player1.draw(0x90ff0000)
+    @player1.draw
   end
   ###################################################
 end # END MyWindow
@@ -121,13 +121,15 @@ end # END MyWindow
 # ======================================================================#
 
 class Player
-  attr_accessor(:x, :y, :x_vel, :y_vel)
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel)
 
-  def initialize
-    @x = 250
-    @y = 460
+  def initialize(spawn_x,spawn_y)
+    @x = spawn_x
+    @y = spawn_y
+    @z = 1
     @x_vel = @y_vel = 0
     @x_acc = @x_acc = 0
+    @player_img = Gosu::Image.new("img/archer1_sm.png")
   end
 
   def move
@@ -158,11 +160,10 @@ class Player
     @y_vel = 0
   end
 
-  def draw(color)
-    draw_rect(@x, @y, 20, 20, color)
+  def draw
+    @player_img.draw(@x,@y,@z, scale_x = 0.5, scale_y = 0.5)
   end
 end # END PLAYER
-
 
 class Enemy
   attr_accessor(:x, :y, :z, :x_vel, :y_vel)
@@ -173,11 +174,11 @@ class Enemy
     @z = 1
     @x_vel = @y_vel = 0
     @x_acc = @x_acc = 0
-    @body_img = Gosu::Image.new("img/eye1.png")
+    @enemy_img = Gosu::Image.new("img/eye1.png")
   end
 
   def draw
-    @body_img.draw(@x,@y,@z)
+    @enemy_img.draw(@x,@y,@z)
   end
 
 end
