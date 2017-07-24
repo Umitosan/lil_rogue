@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'gosu'
+require 'pry'
 include Gosu
 
 # ======================================================================#
@@ -32,6 +33,9 @@ class MyWindow < Window
               x, y + h, color, x + w, y + h, color
   end
 
+  # image draw
+  # draw(x, y, z, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default) ⇒ void
+
   # def draw_grass
   #   draw_rect(0, 480, WINDOW_WIDTH, 20, @colorMint)
   #   draw_rect(0, 500, WINDOW_WIDTH, 20, 0x8000ddbb)
@@ -42,7 +46,14 @@ class MyWindow < Window
   # end
 
   def draw_wall
-
+    corner = 0
+    12.times do |i|
+      @wall1.draw(corner, 0, 0) # top row
+      @wall1.draw(corner, 704, 0) # bottom row
+      @wall1.draw(0, corner, 0) # left row
+      @wall1.draw(704, corner, 0) # right row
+      corner += 64
+    end
   end
 
   def frame_count
@@ -76,8 +87,7 @@ class MyWindow < Window
   end
 
   def draw ### DRAW ##################################
-    # draw_rect(0, 0, 800, 480, 0x400000ff)       # sky
-    # draw_grass
+    draw_rect(0, 0, 768, 768, 0x400000ff)       # sky
     draw_wall
     @player1.draw(0x90ff0000)
   end
