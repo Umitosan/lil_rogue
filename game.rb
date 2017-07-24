@@ -25,6 +25,7 @@ class MyWindow < Window
     @colorBrightPurple = 0x80ff00ff
     @player1 = Player.new(320,320)
     @enemy1 = Enemy.new(193,193)
+    @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
@@ -34,18 +35,6 @@ class MyWindow < Window
     draw_quad x, y, color, x + w, y, color,
               x, y + h, color, x + w, y + h, color
   end
-
-  # image draw
-  # draw(x, y, z, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default) ⇒ void
-
-  # def draw_grass
-  #   draw_rect(0, 480, WINDOW_WIDTH, 20, @colorMint)
-  #   draw_rect(0, 500, WINDOW_WIDTH, 20, 0x8000ddbb)
-  #   draw_rect(0, 520, WINDOW_WIDTH, 20, 0x8000ccbb)
-  #   draw_rect(0, 540, WINDOW_WIDTH, 20, 0x8000bbbb)
-  #   draw_rect(0, 560, WINDOW_WIDTH, 20, 0x8000aabb)
-  #   draw_rect(0, 580, WINDOW_WIDTH, 20, 0x8000aabb)
-  # end
 
   def draw_floor
     corner = 0
@@ -86,8 +75,13 @@ class MyWindow < Window
       @player1.y_vel = 5
     when Gosu::KbEscape
       self.close!
+    when Gosu::KbSpace
+      if (@arrows_arr.length < 3)
+        myArrow1 = Arrow.new(@player1.x, @player1.y, 0, -10)
+        @arrows_arr.push(myArrow1)
+      end
     end
-  end
+  end # END BUTTON DOWN
 
   def button_up(id)
     case id
@@ -100,11 +94,19 @@ class MyWindow < Window
     when Gosu::KbDown
       @player1.y_vel = 0
     end
-  end
+  end # END BUTTON UP
+
   ###################################################
   def update
     frame_count
-    @player1.move
+    @player1.update
+    @arrows_arr.each do |ar|
+      if ar.in_bounds?
+        ar.update
+      else
+        @arrows_arr.delete(ar)
+      end
+    end
   end
 
   def draw
@@ -112,6 +114,11 @@ class MyWindow < Window
     draw_wall
     @enemy1.draw
     @player1.draw
+    if (@arrows_arr.length != 0)
+      @arrows_arr.each do |ar|
+        ar.draw
+      end
+    end
   end
   ###################################################
 end # END MyWindow
@@ -121,7 +128,7 @@ end # END MyWindow
 # ======================================================================#
 
 class Player
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel)
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :facing)
 
   def initialize(spawn_x,spawn_y)
     @x = spawn_x
@@ -130,9 +137,10 @@ class Player
     @x_vel = @y_vel = 0
     @x_acc = @x_acc = 0
     @player_img = Gosu::Image.new("img/archer1_sm.png")
+    @facing = "up"
   end
 
-  def move
+  def update
     if @x_vel == -5  ### LEFT
       if ((@x - @x_vel) > 0)
         @x += @x_vel
@@ -163,7 +171,45 @@ class Player
   def draw
     @player_img.draw(@x,@y,@z, scale_x = 0.5, scale_y = 0.5)
   end
-end # END PLAYER
+end # END PLAYER CLASS
+
+class Arrow
+
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel)
+
+  def initialize(x, y, x_vel, y_vel)
+    @x = x
+    @y = y
+    @z = 1
+    @x_vel = x_vel
+    @y_vel = y_vel
+    @arrow_img = Gosu::Image.new("img/arrow1_sm.png")
+  end
+
+  def reset_vel
+    @x_vel = 0
+    @y_vel = 0
+  end
+
+  def update
+    @x += @x_vel
+    @y += @y_vel
+  end
+
+  def in_bounds?
+    bounds = nil
+    if ((@x > 0) && (@x < WINDOW_WIDTH - 64) && (@y > 0) && (@y < WINDOW_HEIGHT - 64))
+      bounds = true
+    else
+      bounds = false
+    end
+    bounds
+  end
+
+  def draw
+    @arrow_img.draw(@x,@y,@z)
+  end
+end  # END ARROW CLASS
 
 class Enemy
   attr_accessor(:x, :y, :z, :x_vel, :y_vel)
@@ -180,7 +226,6 @@ class Enemy
   def draw
     @enemy_img.draw(@x,@y,@z)
   end
-
-end
+end # END ENEMY CLASS
 
 MyWindow.new.show
