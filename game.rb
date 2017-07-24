@@ -24,6 +24,7 @@ class MyWindow < Window
     @colorMint = 0x8000ffbb
     @colorBrightPurple = 0x80ff00ff
     @player1 = Player.new
+    @enemy1 = Enemy.new(193,193)
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
@@ -100,18 +101,19 @@ class MyWindow < Window
       @player1.y_vel = 0
     end
   end
-
-  def update  ### UPDATE ############################
+  ###################################################
+  def update
     frame_count
     @player1.move
   end
 
-  def draw ### DRAW ##################################
-    # draw_rect(0, 0, 768, 768, 0x400000ff)       # sky
+  def draw
     draw_floor
     draw_wall
+    @enemy1.draw
     @player1.draw(0x90ff0000)
   end
+  ###################################################
 end # END MyWindow
 
 # ======================================================================#
@@ -161,5 +163,23 @@ class Player
   end
 end # END PLAYER
 
+
+class Enemy
+  attr_accessor(:x, :y, :z, :x_vel, :y_vel)
+
+  def initialize(spawn_x,spawn_y)
+    @x = spawn_x
+    @y = spawn_y
+    @z = 1
+    @x_vel = @y_vel = 0
+    @x_acc = @x_acc = 0
+    @body_img = Gosu::Image.new("img/eye1.png")
+  end
+
+  def draw
+    @body_img.draw(@x,@y,@z)
+  end
+
+end
 
 MyWindow.new.show
