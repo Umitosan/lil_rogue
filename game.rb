@@ -24,6 +24,7 @@ class MyWindow < Window
     @colorMint = 0x8000ffbb
     @colorBrightPurple = 0x80ff00ff
     @player1 = Player.new
+    @floor1 = Gosu::Image.new("img/floor_checker_1.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
   end
@@ -69,6 +70,10 @@ class MyWindow < Window
         @player1.x_vel = -5
     when Gosu::KbRight
         @player1.x_vel = 5
+    when Gosu::KbUp
+      @player1.y_vel = -5
+    when Gosu::KbDown
+      @player1.y_vel = 5
     end
   end
 
@@ -78,6 +83,10 @@ class MyWindow < Window
       @player1.x_vel = 0
     when Gosu::KbRight
       @player1.x_vel = 0
+    when Gosu::KbUp
+      @player1.y_vel = 0
+    when Gosu::KbDown
+      @player1.y_vel = 0
     end
   end
 
@@ -114,12 +123,21 @@ class Player
       end
     end
     if @x_vel == 5   ### RIGHT
-      if ((@x + @x_vel) < (WINDOW_WIDTH - 20))
+      if ((@x + @x_vel) < (WINDOW_WIDTH - 64))
         @x += @x_vel
       end
     end
-    @y += @y_vel
-  end
+    if @y_vel == -5  ### LEFT
+      if ((@y - @y_vel) > 0)
+        @y += @y_vel
+      end
+    end
+    if @y_vel == 5   ### RIGHT
+      if ((@y + @y_vel) < (WINDOW_WIDTH - 64))
+        @y += @y_vel
+      end
+    end
+  end  # END MOVE
 
   def reset_vel
     @x_vel = 0
@@ -129,7 +147,7 @@ class Player
   def draw(color)
     draw_rect(@x, @y, 20, 20, color)
   end
-end # END Player
+end # END PLAYER
 
 
 MyWindow.new.show
