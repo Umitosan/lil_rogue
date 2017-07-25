@@ -1,7 +1,12 @@
 require 'rubygems'
 require 'gosu'
 require 'pry'
+require_relative 'player'
+require_relative 'arrow'
+require_relative 'enemy'
+require_relative 'hud'
 include Gosu
+
 
 # ======================================================================#
 # ======================================================================#
@@ -64,38 +69,37 @@ class MyWindow < Window
     @frame += 1
   end
 
+  # def btn_down_any?
+  #
+  # end
+
   def button_down(button)
-    case button
-    when Gosu::KbLeft then ( @player1.x_vel = -5 )
-    when Gosu::KbRight then ( @player1.x_vel = 5 )
-    when Gosu::KbUp then ( @player1.y_vel = -5 )
-    when Gosu::KbDown then ( @player1.y_vel = 5 )
-    when Gosu::KbEscape then ( self.close! )
-    when Gosu::KbSpace
-      if (@arrows_arr.length < 3)
-        myArrow1 = Arrow.new(@player1.x, @player1.y, 0, -10)
-        @arrows_arr.push(myArrow1)
-      end
+    if button == Gosu::KbEscape
+       self.close!
     else
       super
     end
   end # END BUTTON DOWN
 
-  def button_up(button)
-    case button
-    when Gosu::KbLeft then ( @player1.x_vel = 0 )
-    when Gosu::KbRight then ( @player1.x_vel = 0 )
-    when Gosu::KbUp then ( @player1.y_vel = 0 )
-    when Gosu::KbDown then ( @player1.y_vel = 0 )
-    else
-      super
-    end
-  end # END BUTTON UP
+  # def button_up(button)
+  #   case button
+  #   when Gosu::KbLeft then ( @player1.x_vel = 0 )
+  #   when Gosu::KbRight then ( @player1.x_vel = 0 )
+  #   when Gosu::KbUp then ( @player1.y_vel = 0 )
+  #   when Gosu::KbDown then ( @player1.y_vel = 0 )
+  #   else
+  #     super
+  #   end
+  # end # END BUTTON UP
 
   ###################################################
   def update
     frame_count
-    @player1.update
+    @player1.move_left if Gosu.button_down?(Gosu::KB_LEFT)
+    @player1.move_right if Gosu.button_down?(Gosu::KB_RIGHT)
+    @player1.move_up if Gosu.button_down?(Gosu::KB_UP)
+    @player1.move_down if Gosu.button_down?(Gosu::KB_DOWN)
+    # @player1.update
     @arrows_arr.each do |ar|
       if ar.in_bounds?
         ar.update
@@ -120,124 +124,10 @@ class MyWindow < Window
   ###################################################
 end # END MyWindow
 
+
 # ======================================================================#
 # ======================================================================#
 # ======================================================================#
-
-class Player
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :facing)
-
-  def initialize(spawn_x,spawn_y)
-    @x = spawn_x
-    @y = spawn_y
-    @z = 1
-    @x_vel = @y_vel = 0
-    @x_acc = @x_acc = 0
-    @player_img = Gosu::Image.new("img/archer1_sm.png")
-    @facing = "up"
-  end
-
-  def update
-    if @x_vel == -5  ### LEFT
-      if ((@x - @x_vel) > 0)
-        @x += @x_vel
-      end
-    end
-    if @x_vel == 5   ### RIGHT
-      if ((@x + @x_vel) < (WINDOW_WIDTH - 64))
-        @x += @x_vel
-      end
-    end
-    if @y_vel == -5  ### LEFT
-      if ((@y - @y_vel) > 0)
-        @y += @y_vel
-      end
-    end
-    if @y_vel == 5   ### RIGHT
-      if ((@y + @y_vel) < (WINDOW_WIDTH - 64))
-        @y += @y_vel
-      end
-    end
-  end  # END MOVE
-
-  def reset_vel
-    @x_vel = 0
-    @y_vel = 0
-  end
-
-  def draw
-    @player_img.draw(@x,@y,@z, scale_x = 0.5, scale_y = 0.5)
-  end
-end # END PLAYER CLASS
-
-class Arrow
-
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel)
-
-  def initialize(x, y, x_vel, y_vel)
-    @x = x
-    @y = y
-    @z = 1
-    @x_vel = x_vel
-    @y_vel = y_vel
-    @arrow_img = Gosu::Image.new("img/arrow1_sm.png")
-  end
-
-  def reset_vel
-    @x_vel = 0
-    @y_vel = 0
-  end
-
-  def update
-    @x += @x_vel
-    @y += @y_vel
-  end
-
-  def in_bounds?
-    bounds = nil
-    if ((@x > 0) && (@x < WINDOW_WIDTH - 64) && (@y > 0) && (@y < WINDOW_HEIGHT - 64))
-      bounds = true
-    else
-      bounds = false
-    end
-    bounds
-  end
-
-  def draw
-    @arrow_img.draw(@x,@y,@z)
-  end
-end  # END ARROW CLASS
-
-class Enemy
-  attr_accessor(:x, :y, :z, :x_vel, :y_vel)
-
-  def initialize(spawn_x,spawn_y)
-    @x = spawn_x
-    @y = spawn_y
-    @z = 1
-    @x_vel = @y_vel = 0
-    @x_acc = @x_acc = 0
-    @enemy_img = Gosu::Image.new("img/eye1.png")
-  end
-
-  def draw
-    @enemy_img.draw(@x,@y,@z)
-  end
-end # END ENEMY CLASS
-
-
-class Hud
-  attr_accessor(:score)
-
-  def initialize
-    @score = Gosu::Image.from_text( "hello", 30 )
-  end
-
-  def draw
-    @score.draw(0,0,0)
-  end
-
-end
 
 
 MyWindow.new.show
