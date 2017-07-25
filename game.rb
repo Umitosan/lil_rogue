@@ -80,8 +80,9 @@ class MyWindow < Window
        self.close!
     elsif button == Gosu::KbSpace
       if (@arrows_arr.length < 3)
-        myArrow1 = Arrow.new(@player1.x, @player1.y, 0, -10)
-        @arrows_arr.push(myArrow1)
+        myArrow = Arrow.new(@player1.x, @player1.y, @player1.angle)
+        myArrow.set_vel(@player1.angle)
+        @arrows_arr.push(myArrow)
       end
     else
       super

@@ -5,10 +5,10 @@ class Player
     @x = spawn_x
     @y = spawn_y
     @z = 1
+    @angle = 0
     @x_vel = @y_vel = 5
     @x_acc = @x_acc = 0
     @player_img = Gosu::Image.new("img/archer1_xs.png")
-    @angle = 0
   end
 
   def move_left

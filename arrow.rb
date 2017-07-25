@@ -1,18 +1,38 @@
 class Arrow
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel)
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :angle)
 
-  def initialize(x, y, x_vel, y_vel)
+  def initialize(x, y, angle)
     @x = x
     @y = y
     @z = 1
-    @x_vel = x_vel
-    @y_vel = y_vel
+    @angle = angle
+    @x_vel = 0
+    @y_vel = 0
     @arrow_img = Gosu::Image.new("img/arrow1_sm.png")
   end
 
   def reset_vel
     @x_vel = 0
     @y_vel = 0
+  end
+
+  def set_vel(someAngle)
+    if someAngle == 0 # UP
+      @x_vel = 0
+      @y_vel = -10
+    elsif someAngle == 180 # DOWN
+      @x_vel = 0
+      @y_vel = 10
+    elsif someAngle == 270 # LEFT
+      @x_vel = -10
+      @y_vel = 0
+    elsif someAngle == 90 # RIGHT
+      @x_vel = 10
+      @y_vel = 0
+    else
+      @x_vel = 0
+      @y_vel = 0
+    end
   end
 
   def update
@@ -31,6 +51,6 @@ class Arrow
   end
 
   def draw
-    @arrow_img.draw(@x,@y,@z)
+    @arrow_img.draw_rot(@x+32,@y+32,@z,@angle)
   end
 end # END ARROW CLASS
