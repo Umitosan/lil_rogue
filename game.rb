@@ -76,6 +76,11 @@ class MyWindow < Window
   def button_down(button)
     if button == Gosu::KbEscape
        self.close!
+    elsif button == Gosu::KbSpace
+      if (@arrows_arr.length < 3)
+        myArrow1 = Arrow.new(@player1.x, @player1.y, 0, -10)
+        @arrows_arr.push(myArrow1)
+      end
     else
       super
     end
@@ -95,11 +100,22 @@ class MyWindow < Window
   ###################################################
   def update
     frame_count
-    @player1.move_left if Gosu.button_down?(Gosu::KB_LEFT)
-    @player1.move_right if Gosu.button_down?(Gosu::KB_RIGHT)
-    @player1.move_up if Gosu.button_down?(Gosu::KB_UP)
-    @player1.move_down if Gosu.button_down?(Gosu::KB_DOWN)
-    # @player1.update
+    if Gosu.button_down?(Gosu::KB_LEFT)
+      @player1.move_left
+      @hud.last_btn = Gosu::Image.from_text( "LEFT", 20 )
+    end
+    if Gosu.button_down?(Gosu::KB_RIGHT)
+      @player1.move_right
+      @hud.last_btn = Gosu::Image.from_text( "RIGHT", 20 )
+    end
+    if Gosu.button_down?(Gosu::KB_UP)
+      @player1.move_up
+      @hud.last_btn = Gosu::Image.from_text( "UP", 20 )
+    end
+    if Gosu.button_down?(Gosu::KB_DOWN)
+      @player1.move_down
+      @hud.last_btn = Gosu::Image.from_text( "DOWN", 20 )
+    end
     @arrows_arr.each do |ar|
       if ar.in_bounds?
         ar.update
