@@ -131,7 +131,7 @@ class MyWindow < Gosu::Window
     else
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
-    ## enemy
+    ## enemy, 16.67 milisec ~= 1 second
     if ((Gosu.milliseconds % @enemy1.time_until_move) <= 16.67)
       @enemy1.change_dir
       @hud.cur_frame = Gosu::Image.from_text( 'enemy moved', 20 )
