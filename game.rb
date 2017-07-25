@@ -36,6 +36,7 @@ class MyWindow < Window
     @frame = 0
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
+    @floor2 = Gosu::Image.new("img/floor2.png")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
     @player1 = Player.new(320,320)
@@ -44,10 +45,15 @@ class MyWindow < Window
   end
 
   def draw_floor
-    corner = 0
-    6.times do |i|
-      6.times do |j|
-        @floor1.draw(i*128, j*128, 0) # top row
+    # corner = 0
+    # 6.times do |i|
+    #   6.times do |j|
+    #     @floor1.draw(i*128, j*128, 0) # top row
+    #   end
+    # end
+    12.times do |i|
+      12.times do |j|
+        @floor2.draw(i*64, j*64, 0)
       end
     end
   end
@@ -99,7 +105,7 @@ class MyWindow < Window
   #   end
   # end # END BUTTON UP
 
-  ###################################################
+  ##############################################################
   def update
     frame_count
     if Gosu.button_down?(Gosu::KB_LEFT)
@@ -144,7 +150,7 @@ class MyWindow < Window
       end
     end
   end
-  ###################################################
+  ##############################################################
 end # END MyWindow
 
 
