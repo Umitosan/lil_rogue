@@ -34,7 +34,6 @@ class MyWindow < Window
   def initialize
     super(WINDOW_WIDTH, WINDOW_HEIGHT, false)
     @frame = 0
-
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
@@ -126,11 +125,17 @@ class MyWindow < Window
         @arrows_arr.delete(ar)
       end
     end
+    if @arrows_arr.length > 0
+      @hud.arrow_status = Gosu::Image.from_text( "ARROW", 20 )
+    else
+      @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
+    end
   end # END UPDATE
 
   def draw
     draw_floor
     draw_wall
+    @hud.draw
     @enemy1.draw
     @player1.draw
     if (@arrows_arr.length != 0)
@@ -138,7 +143,6 @@ class MyWindow < Window
         ar.draw
       end
     end
-    @hud.draw
   end
   ###################################################
 end # END MyWindow
