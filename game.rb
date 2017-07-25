@@ -29,6 +29,7 @@ class MyWindow < Window
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
+    @hud = Hud.new
   end
 
   def draw_rect(x, y, w, h, color)
@@ -63,36 +64,31 @@ class MyWindow < Window
     @frame += 1
   end
 
-  def button_down(id)
-    case id
-    when Gosu::KbLeft
-        @player1.x_vel = -5
-    when Gosu::KbRight
-        @player1.x_vel = 5
-    when Gosu::KbUp
-      @player1.y_vel = -5
-    when Gosu::KbDown
-      @player1.y_vel = 5
-    when Gosu::KbEscape
-      self.close!
+  def button_down(button)
+    case button
+    when Gosu::KbLeft then ( @player1.x_vel = -5 )
+    when Gosu::KbRight then ( @player1.x_vel = 5 )
+    when Gosu::KbUp then ( @player1.y_vel = -5 )
+    when Gosu::KbDown then ( @player1.y_vel = 5 )
+    when Gosu::KbEscape then ( self.close! )
     when Gosu::KbSpace
       if (@arrows_arr.length < 3)
         myArrow1 = Arrow.new(@player1.x, @player1.y, 0, -10)
         @arrows_arr.push(myArrow1)
       end
+    else
+      super
     end
   end # END BUTTON DOWN
 
-  def button_up(id)
-    case id
-    when Gosu::KbLeft
-      @player1.x_vel = 0
-    when Gosu::KbRight
-      @player1.x_vel = 0
-    when Gosu::KbUp
-      @player1.y_vel = 0
-    when Gosu::KbDown
-      @player1.y_vel = 0
+  def button_up(button)
+    case button
+    when Gosu::KbLeft then ( @player1.x_vel = 0 )
+    when Gosu::KbRight then ( @player1.x_vel = 0 )
+    when Gosu::KbUp then ( @player1.y_vel = 0 )
+    when Gosu::KbDown then ( @player1.y_vel = 0 )
+    else
+      super
     end
   end # END BUTTON UP
 
@@ -107,7 +103,7 @@ class MyWindow < Window
         @arrows_arr.delete(ar)
       end
     end
-  end
+  end # END UPDATE
 
   def draw
     draw_floor
@@ -119,6 +115,7 @@ class MyWindow < Window
         ar.draw
       end
     end
+    @hud.draw
   end
   ###################################################
 end # END MyWindow
@@ -227,5 +224,20 @@ class Enemy
     @enemy_img.draw(@x,@y,@z)
   end
 end # END ENEMY CLASS
+
+
+class Hud
+  attr_accessor(:score)
+
+  def initialize
+    @score = Gosu::Image.from_text( "hello", 30 )
+  end
+
+  def draw
+    @score.draw(0,0,0)
+  end
+
+end
+
 
 MyWindow.new.show
