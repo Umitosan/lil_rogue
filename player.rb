@@ -12,25 +12,25 @@ class Player
   end
 
   def move_left
-    if ((@x - @x_vel) > 0)
+    if ((@x - @x_vel) > 64)
       @x -= @x_vel
       @angle = 270
     end
   end
   def move_right
-    if ((@x + @x_vel) < (WINDOW_WIDTH - 64))
+    if ((@x + @x_vel) < (WINDOW_WIDTH - 2*64))
       @x += @x_vel
       @angle = 90
     end
   end
   def move_up
-    if ((@y - @y_vel) > 0)
+    if ((@y - @y_vel) > 64)
       @y -= @y_vel
       @angle = 0
     end
   end
   def move_down
-    if ((@y + @y_vel) < (WINDOW_WIDTH - 64))
+    if ((@y + @y_vel) < (WINDOW_WIDTH - 2*64))
       @y += @y_vel
       @angle = 180
     end
