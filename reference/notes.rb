@@ -11,7 +11,10 @@
 # cd gosu-examples-master/examples
 # ruby tutorial.rb
 # Some examples require the following additional libraries:
-# 
+#
 # gem install chipmunk
 # gem install rmagick
 # gem install opengl
+
+# WIKI
+# https://github.com/gosu/gosu/wiki

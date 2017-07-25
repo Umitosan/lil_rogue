@@ -30,9 +30,10 @@ end
 # ======================================================================#
 # ======================================================================#
 
-class MyWindow < Window
+class MyWindow < Gosu::Window
   def initialize
-    super(WINDOW_WIDTH, WINDOW_HEIGHT, false)
+    # self.caption = 'Little Rogue'
+    super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
     @frame = 0
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
@@ -45,12 +46,6 @@ class MyWindow < Window
   end
 
   def draw_floor
-    # corner = 0
-    # 6.times do |i|
-    #   6.times do |j|
-    #     @floor1.draw(i*128, j*128, 0) # top row
-    #   end
-    # end
     12.times do |i|
       12.times do |j|
         @floor2.draw(i*64, j*64, 0)
@@ -75,10 +70,6 @@ class MyWindow < Window
     end
     @frame += 1
   end
-
-  # def btn_down_any?
-  #
-  # end
 
   def button_down(button)
     if button == Gosu::KbEscape
@@ -107,7 +98,9 @@ class MyWindow < Window
 
   ##############################################################
   def update
+    # 1 seconds timer
     frame_count
+    ## Buttons Buttons Buttons
     if Gosu.button_down?(Gosu::KB_LEFT)
       @player1.move_left
       @hud.last_btn = Gosu::Image.from_text( "LEFT", 20 )
@@ -124,6 +117,7 @@ class MyWindow < Window
       @player1.move_down
       @hud.last_btn = Gosu::Image.from_text( "DOWN", 20 )
     end
+    # arrows
     @arrows_arr.each do |ar|
       if ar.in_bounds?
         ar.update
@@ -131,11 +125,18 @@ class MyWindow < Window
         @arrows_arr.delete(ar)
       end
     end
+    ## hud arrows
     if @arrows_arr.length > 0
       @hud.arrow_status = Gosu::Image.from_text( "ARROW", 20 )
     else
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
+    ## enemy
+    if ((Gosu.milliseconds % @enemy1.time_until_move) <= 16.67)
+      @enemy1.change_dir
+      @hud.cur_frame = Gosu::Image.from_text( 'enemy moved', 20 )
+    end
+    @enemy1.update
   end # END UPDATE
 
   def draw
