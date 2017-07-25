@@ -8,7 +8,9 @@ class Hud
   end
 
   def draw
-    @score.draw(680,0,0)
-    @last_btn.draw(680,40,0)
+    draw_rect(WINDOW_WIDTH-128, 0, 128, 64, Colors::Black)
+    @score.draw(WINDOW_WIDTH-128,0,0)
+    @last_btn.draw(WINDOW_WIDTH-128,20,0)
   end
+
 end # END ENEMY CLASS

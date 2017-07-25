@@ -7,39 +7,41 @@ require_relative 'enemy'
 require_relative 'hud'
 include Gosu
 
-
-# ======================================================================#
-# ======================================================================#
-# ======================================================================#
-
-
 WINDOW_WIDTH = 768
 WINDOW_HEIGHT = 768
 
+module Colors
+  Black = 0x99000000
+  Red = 0x80ff0000
+  Green = 0x8000ff00
+  Blue = 0x800000ff
+  Yellow = 0x80ffff00
+  Orange = 0x80ff9900
+  Mint = 0x8000ffbb
+  BrightPurple = 0x80ff00ff
+end
+
+def draw_rect(x, y, w, h, color)
+  draw_quad x, y, color, x + w, y, color,
+            x, y + h, color, x + w, y + h, color
+end
+
+# ======================================================================#
+# ======================================================================#
+# ======================================================================#
 
 class MyWindow < Window
   def initialize
     super(WINDOW_WIDTH, WINDOW_HEIGHT, false)
     @frame = 0
-    @colorRed = 0x80ff0000
-    @colorGreen = 0x8000ff00
-    @colorBlue = 0x800000ff
-    @colorYellow = 0x80ffff00
-    @colorOrange = 0x80ff9900
-    @colorMint = 0x8000ffbb
-    @colorBrightPurple = 0x80ff00ff
-    @player1 = Player.new(320,320)
-    @enemy1 = Enemy.new(193,193)
+
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
+    @player1 = Player.new(320,320)
+    @enemy1 = Enemy.new(193,193)
     @hud = Hud.new
-  end
-
-  def draw_rect(x, y, w, h, color)
-    draw_quad x, y, color, x + w, y, color,
-              x, y + h, color, x + w, y + h, color
   end
 
   def draw_floor
