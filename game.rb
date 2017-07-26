@@ -43,8 +43,9 @@ class MyWindow < Gosu::Window
     @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
-    @player1 = Player.new(320,320)
-    @enemy1 = Enemy.new(193,193)
+    @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
+    # @enemy1 = Enemy.new(193,193)
+    Enemy.spawn_mobs(3)
     @hud = Hud.new
     @hud.reset_hearts
   end
@@ -136,24 +137,27 @@ class MyWindow < Gosu::Window
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
     ## enemy, 16.67 milisecond ~= 1 second
-    if ((Gosu.milliseconds % @enemy1.time_until_move) <= 16.67)
-      @enemy1.change_dir
-      @hud.cur_frame = Gosu::Image.from_text( 'enemy moved', 20 )
+    Enemy.get_mobs.each do |enemy|
+      if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
+        enemy.change_dir
+      end
+      enemy.update
     end
-    @enemy1.update
   end # END UPDATE
 
   def draw
     draw_floor
     draw_wall
     @hud.draw
-    @enemy1.draw
-    @player1.draw
     if (@arrows_arr.length != 0)
       @arrows_arr.each do |ar|
         ar.draw
       end
     end
+    Enemy.get_mobs.each do |enemy|
+      enemy.draw
+    end
+    @player1.draw
   end
   ##############################################################
 end # END MyWindow

@@ -1,6 +1,8 @@
 class Enemy
   attr_accessor(:x, :y, :z, :x_vel, :y_vel, :time_until_move, :speed)
 
+  @@mobs = []
+
   def initialize(spawn_x,spawn_y)
     @x = spawn_x
     @y = spawn_y
@@ -10,6 +12,17 @@ class Enemy
     @y_vel = 0
     @enemy_img = Gosu::Image.new("img/eye1.png")
     @time_until_move = 500
+  end
+
+  def self.get_mobs
+    @@mobs
+  end
+
+  def self.spawn_mobs(num)
+    num.times do |i|
+      mob = Enemy.new(WINDOW_WIDTH / 2 - 32,128)
+      @@mobs.push(mob)
+    end
   end
 
   def change_dir
