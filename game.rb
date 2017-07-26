@@ -14,6 +14,7 @@ WINDOW_HEIGHT = 768
 
 module Colors
   Black = 0x99000000
+  LightBlk = 0x33000000
   Red = 0x80ff0000
   Green = 0x8000ff00
   Blue = 0x800000ff

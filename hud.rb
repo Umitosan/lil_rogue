@@ -45,7 +45,7 @@ class Heart
   end
 
   def draw
-    draw_rect(0, 0, 192, 64, 0x33000000)
+    draw_rect(0, 0, 192, 64, Colors::LightBlk)
     @image.draw(@x,@y,@z)
   end
 
