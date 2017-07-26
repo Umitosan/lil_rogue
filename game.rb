@@ -35,8 +35,8 @@ end
 
 class MyWindow < Gosu::Window
   def initialize
-    # self.caption = 'Little Rogue'
     super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
+    self.caption = "Little Rogue" # the caption method must come after the window creation "super()"
     @frame = 0
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
@@ -44,7 +44,6 @@ class MyWindow < Gosu::Window
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
-    # @enemy1 = Enemy.new(193,193)
     Enemy.spawn_mobs(3)
     @hud = Hud.new
     @hud.reset_hearts
@@ -89,17 +88,6 @@ class MyWindow < Gosu::Window
       super
     end
   end # END BUTTON DOWN
-
-  # def button_up(button)
-  #   case button
-  #   when Gosu::KbLeft then ( @player1.x_vel = 0 )
-  #   when Gosu::KbRight then ( @player1.x_vel = 0 )
-  #   when Gosu::KbUp then ( @player1.y_vel = 0 )
-  #   when Gosu::KbDown then ( @player1.y_vel = 0 )
-  #   else
-  #     super
-  #   end
-  # end # END BUTTON UP
 
   ##############################################################
   def update
@@ -150,16 +138,12 @@ class MyWindow < Gosu::Window
     draw_wall
     @hud.draw
     if (@arrows_arr.length != 0)
-      @arrows_arr.each do |ar|
-        ar.draw
-      end
+      @arrows_arr.each { |ar| ar.draw }
     end
-    Enemy.get_mobs.each do |enemy|
-      enemy.draw
-    end
+    Enemy.get_mobs.each { |enemy| enemy.draw }
     @player1.draw
   end
-  ##############################################################
+    ##############################################################
 end # END MyWindow
 
 

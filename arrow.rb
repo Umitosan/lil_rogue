@@ -36,13 +36,15 @@ class Arrow
   end
 
   def update
-    @x += @x_vel
-    @y += @y_vel
+    if in_bounds?
+      @x += @x_vel
+      @y += @y_vel
+    end
   end
 
   def in_bounds?
     bounds = nil
-    if ((@x > 0) && (@x < WINDOW_WIDTH - 64) && (@y > 0) && (@y < WINDOW_HEIGHT - 64))
+    if ((@x > 64) && (@x < WINDOW_WIDTH - 128) && (@y > 64) && (@y < WINDOW_HEIGHT - 128))
       bounds = true
     else
       bounds = false

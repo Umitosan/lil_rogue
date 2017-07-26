@@ -11,6 +11,7 @@ class Enemy
     @x_vel = 0
     @y_vel = 0
     @enemy_img = Gosu::Image.new("img/eye1.png")
+    # @enemy_img = Gosu::Image.load_tiles("floor2test.png", 25, 25)
     @time_until_move = 500
   end
 
