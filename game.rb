@@ -5,6 +5,8 @@ require_relative 'player'
 require_relative 'arrow'
 require_relative 'enemy'
 require_relative 'hud'
+require_relative 'room'
+require_relative 'map'
 include Gosu
 
 WINDOW_WIDTH = 768
@@ -36,13 +38,14 @@ class MyWindow < Gosu::Window
     super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
     @frame = 0
     @arrows_arr = []
-    @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg")
-    @floor2 = Gosu::Image.new("img/floor2.png")
-    @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)  ## 32 pixels
-    @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)  ## 64 pixels
+    @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
+    @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
+    @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)
+    @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(320,320)
     @enemy1 = Enemy.new(193,193)
     @hud = Hud.new
+    @hud.reset_hearts
   end
 
   def draw_floor
@@ -131,7 +134,7 @@ class MyWindow < Gosu::Window
     else
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
-    ## enemy, 16.67 milisec ~= 1 second
+    ## enemy, 16.67 milisecond ~= 1 second
     if ((Gosu.milliseconds % @enemy1.time_until_move) <= 16.67)
       @enemy1.change_dir
       @hud.cur_frame = Gosu::Image.from_text( 'enemy moved', 20 )
