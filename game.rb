@@ -37,6 +37,7 @@ module MyImg
   Arrow = Gosu::Image.new("img/arrow1_sm.png")
   GameOver = Gosu::Image.new("img/gameover1static.png")
   GameWin = Gosu::Image.new("img/youwin1.png")
+  Welcome = Gosu::Image.new("img/welcome1.png")
 end
 
 # ======================================================================#
@@ -52,11 +53,12 @@ class MyWindow < Gosu::Window
     @floor1 = MyImg::Floor1
     @floor2 = MyImg::Floor2
     @wall1 = MyImg::Wall1
+    @welcome = MyImg::Welcome
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
     Enemy.spawn_mobs(8)
     @hud = Hud.new
     @exit = Exit.new(576, 128)
-    @game_state = "go"
+    @game_state = "start"
   end
 
   def draw_rect(x, y, w, h, color)
@@ -100,6 +102,10 @@ class MyWindow < Gosu::Window
         myArrow.set_tip(@player1.angle)
         @arrows_arr.push(myArrow)
       end
+    elsif (button == Gosu::KbS)
+      if @game_state == "start"
+        @game_state = "go"
+      end
     else
       super
     end
@@ -128,9 +134,14 @@ class MyWindow < Gosu::Window
     hit
   end
 
+  def gamestart_menu
+    draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
+    MyImg::Welcome.draw(150,128,2)
+  end
+
   def gameover_menu
     draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
-    MyImg::GameOver.draw(94,128,2)
+    MyImg::GameOver.draw(100,110,2)
   end
 
   def gamewin_menu
@@ -225,7 +236,9 @@ class MyWindow < Gosu::Window
     end
     Enemy.get_mobs.each { |enemy| enemy.draw }
     @player1.draw
-    if @game_state == "gameover"
+    if @game_state == "start"
+      gamestart_menu
+    elsif @game_state == "gameover"
       gameover_menu
     elsif @game_state == "gamewin"
       gamewin_menu
