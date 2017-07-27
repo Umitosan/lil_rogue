@@ -7,6 +7,7 @@ require_relative 'enemy'
 require_relative 'hud'
 require_relative 'room'
 require_relative 'map'
+require_relative 'exit'
 include Gosu
 
 WINDOW_WIDTH = 768
@@ -48,6 +49,7 @@ class MyWindow < Gosu::Window
     Enemy.spawn_mobs(4)
     @hud = Hud.new
     @hud.reset_hearts
+    @exit = Exit.new(576, 128)
   end
 
   def draw_floor
@@ -150,11 +152,13 @@ class MyWindow < Gosu::Window
       end
       enemy.update
     end
+    @exit.update
   end # END UPDATE
 
   def draw
     draw_floor
     draw_wall
+    @exit.draw
     @hud.draw
     if (@arrows_arr.length != 0)
       @arrows_arr.each do |ar|

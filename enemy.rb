@@ -7,15 +7,15 @@ class Enemy
     @x = spawn_x
     @y = spawn_y
     @z = 1
-    @speed = Gosu.random(1.5, 3.5)
+    @speed = Gosu.random(1.5, 4.5)
     @x_vel = 0
     @y_vel = 0
     @enemy_img = Gosu::Image.new("img/eye1.png")
-    @enemy_anim_arr = Gosu::Image.load_tiles("img/eye2anim.png", 64, 64)
-    @anim_count = 0
+    @enemy_anim_arr = Gosu::Image.load_tiles("img/eye2anim.png", 64, 64, tileable: true)
+    @anim_frame = 0
     @enemy_cur_img = @enemy_anim_arr[0]
     @time_until_move = Gosu.random(250,550)
-    @time_until_anim = Gosu.random(550,750)
+    @anim_timer = Gosu.random(550,750)
   end
 
   def self.get_mobs
@@ -60,12 +60,12 @@ class Enemy
       @y += @y_vel
     end
     # advance animation to next frame given time 500 = half second
-    if (Gosu.milliseconds % @time_until_anim <= 16.67)
-      @enemy_cur_img = @enemy_anim_arr[@anim_count]
-      if ((@anim_count + 1) > 3)
-        @anim_count = 0
+    if (Gosu.milliseconds % @anim_timer <= 16.67)
+      @enemy_cur_img = @enemy_anim_arr[@anim_frame]
+      if ((@anim_frame + 1) > 3)
+        @anim_frame = 0
       else
-        @anim_count += 1
+        @anim_frame += 1
       end
     end
   end
@@ -73,7 +73,6 @@ class Enemy
   def draw
     #hit box helper
     # draw_rect(@x+8,@y+8,48,48,Colors::Green)
-    # @enemy_img.draw(@x,@y,@z)
     @enemy_cur_img.draw(@x,@y,@z)
   end
 end # END ENEMY CLASS
