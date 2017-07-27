@@ -8,7 +8,7 @@ class Player
     @angle = 0
     @x_vel = @y_vel = 5
     @x_acc = @x_acc = 0
-    @player_img = Gosu::Image.new("img/archer1_xs.png")
+    @player_img = MyImg::Archer
     @life = life
     @invul = false
     @invul_duration = 1000

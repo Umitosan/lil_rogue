@@ -10,7 +10,7 @@ class Arrow
     @angle = angle
     @x_vel = 0
     @y_vel = 0
-    @arrow_img = Gosu::Image.new("img/arrow1_sm.png")
+    @arrow_img = MyImg::Arrow
   end
 
   def reset_vel

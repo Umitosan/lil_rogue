@@ -28,11 +28,11 @@ end
 
 module MyImg
   Hearts = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
-end
-
-def draw_rect(x, y, w, h, color)
-  draw_quad x, y, color, x + w, y, color,
-            x, y + h, color, x + w, y + h, color
+  EyeStatic = Gosu::Image.new("img/eye1.png")
+  EyeAnim = Gosu::Image.load_tiles("img/eye2anim.png", 64, 64, tileable: true)
+  Archer = Gosu::Image.new("img/archer1_xs.png")
+  Arrow = Gosu::Image.new("img/arrow1_sm.png")
+  GameOver = Gosu::Image.new("img/gameover1static.png")
 end
 
 # ======================================================================#
@@ -53,6 +53,11 @@ class MyWindow < Gosu::Window
     @hud = Hud.new
     @exit = Exit.new(576, 128)
     @game_state = "go"
+  end
+
+  def draw_rect(x, y, w, h, color)
+    draw_quad x, y, color, x + w, y, color,
+              x, y + h, color, x + w, y + h, color
   end
 
   def draw_floor
@@ -119,8 +124,9 @@ class MyWindow < Gosu::Window
     hit
   end
 
-  def game_over_man
-    @game_state = "dead"
+  def gameover_menu
+    draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
+    MyImg::GameOver.draw(94,128,2)
   end
 
   ##############################################################
@@ -181,7 +187,7 @@ class MyWindow < Gosu::Window
                 @hud.update_hearts(@player1.life)
               else
                 # GAME OVER!!!!!!!!
-                game_over_man
+                @game_state = "gameover"
               end
             end
           end
@@ -206,6 +212,9 @@ class MyWindow < Gosu::Window
     end
     Enemy.get_mobs.each { |enemy| enemy.draw }
     @player1.draw
+    if @game_state == "gameover"
+      gameover_menu
+    end
   end
   ##############################################################
 end # END MyWindow
