@@ -136,7 +136,9 @@ class MyWindow < Gosu::Window
 
   def gamestart_menu
     draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
-    MyImg::Welcome.draw(150,128,2)
+    MyImg::Welcome.draw(164,128,2)
+    startText = Gosu::Image.from_text( " Press 'S' to Start! ", 40 )
+    startText.draw(WINDOW_WIDTH/2-155,WINDOW_HEIGHT/2+200,2,1,1)
   end
 
   def gameover_menu
