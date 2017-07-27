@@ -45,7 +45,7 @@ class MyWindow < Gosu::Window
     @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
-    Enemy.spawn_mobs(4)
+    Enemy.spawn_mobs(3)
     @hud = Hud.new
     @hud.reset_hearts
     @exit = Exit.new(576, 128)
@@ -102,8 +102,17 @@ class MyWindow < Gosu::Window
     hit
   end
 
-  def enemy_hit_player?(enemy)
-
+  def player_hit_enemy?(mob)
+    #calculate the center point of player and enemy to make this a bit easier
+    pCX = @player1.x+32
+    pCY = @player1.y+32
+    mCX = mob.x+32
+    mCY = mob.y+32
+    hit = false
+    if ( (pCX > mCX-32) && (pCX < mCX+32) && (pCY > mCY-32) && (pCY < mCY+32) )
+       hit = true
+    end
+    hit
   end
 
   ##############################################################
@@ -144,14 +153,19 @@ class MyWindow < Gosu::Window
     end
     ## hud arrows
     if @arrows_arr.length > 0
-      @hud.arrow_status = Gosu::Image.from_text( "ARROW", 20 )
+      @hud.arrow_status = Gosu::Image.from_text( "Arrow OUT", 20 )
     else
-      @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
+      @hud.arrow_status = Gosu::Image.from_text( "----", 20 )
     end
+    ## check enemy move time, enemy hit
     Enemy.get_mobs.each do |enemy|
       # enemy, 16.67 milisecond ~= 1 second
       if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
         enemy.change_dir
+      end
+      if player_hit_enemy?(enemy)
+        # update hearts hud
+        @hud.player_hit = Gosu::Image.from_text( "player hit!", 20 )
       end
       enemy.update
     end

@@ -7,7 +7,7 @@ class Enemy
     @x = spawn_x
     @y = spawn_y
     @z = 1
-    @speed = Gosu.random(1.5, 4.5)
+    @speed = Gosu.random(3, 7)
     @x_vel = 0
     @y_vel = 0
     @enemy_img = Gosu::Image.new("img/eye1.png")

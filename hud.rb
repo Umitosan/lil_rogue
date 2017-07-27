@@ -1,13 +1,14 @@
 class Hud
-  attr_accessor(:score, :score_img, :last_btn, :arrow_status, :cur_frame, :hearts)
+  attr_accessor(:score, :score_img, :last_btn, :arrow_status, :cur_frame, :hearts, :player_hit)
 
   def initialize
     # .from_text(window, text, font_name, line_height, line_spacing, width, align)
     @score = 0
     @score_img = Gosu::Image.from_text( "SCORE: 0", 20)
     @last_btn = Gosu::Image.from_text( "NONE", 20 )
-    @arrow_status = Gosu::Image.from_text( "--", 20 )
+    @arrow_status = Gosu::Image.from_text( "----", 20 )
     @cur_frame = Gosu::Image.from_text( "0", 20 )
+    @player_hit = Gosu::Image.from_text( "####", 20 )
     @hearts = []
   end
 
@@ -32,6 +33,7 @@ class Hud
     @last_btn.draw(WINDOW_WIDTH-128,20,0)
     @arrow_status.draw(WINDOW_WIDTH-128,40,0)
     @cur_frame.draw(0,64,0)
+    @player_hit.draw(192,0,1)
     @hearts.each do |heart|
       heart.draw
     end
@@ -47,7 +49,8 @@ class Heart
     @x = x
     @y = y
     @z = 2
-    @image = Gosu::Image.new("img/heart1.png", :tileable => true)
+    @image_arr = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
+    @image = @image_arr[0]
   end
 
   def draw
