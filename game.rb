@@ -27,6 +27,9 @@ module Colors
 end
 
 module MyImg
+  Floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
+  Floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
+  Wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
   Hearts = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
   EyeStatic = Gosu::Image.new("img/eye1.png")
   EyeAnim = Gosu::Image.load_tiles("img/eye2anim.png", 64, 64, tileable: true)
@@ -46,11 +49,11 @@ class MyWindow < Gosu::Window
     self.caption = "Little Rogue" # the caption method must come after the window creation "super()"
     @frame = 0
     @arrows_arr = []
-    @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
-    @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
-    @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
+    @floor1 = MyImg::Floor1
+    @floor2 = MyImg::Floor2
+    @wall1 = MyImg::Wall1
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
-    Enemy.spawn_mobs(2)
+    Enemy.spawn_mobs(8)
     @hud = Hud.new
     @exit = Exit.new(576, 128)
     @game_state = "go"
