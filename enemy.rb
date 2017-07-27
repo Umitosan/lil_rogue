@@ -7,14 +7,14 @@ class Enemy
     @x = spawn_x
     @y = spawn_y
     @z = 1
-    @speed = Gosu.random(3, 7)
+    @speed = Gosu.random(3, 9)
     @x_vel = 0
     @y_vel = 0
     @enemy_img = MyImg::EyeStatic
     @enemy_anim_arr = MyImg::EyeAnim
     @anim_frame = 0
     @enemy_cur_img = @enemy_anim_arr[0]
-    @time_until_move = Gosu.random(250,550)
+    @time_until_move = Gosu.random(100,550)
     @anim_timer = Gosu.random(550,750)
   end
 

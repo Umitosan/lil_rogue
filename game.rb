@@ -33,6 +33,7 @@ module MyImg
   Archer = Gosu::Image.new("img/archer1_xs.png")
   Arrow = Gosu::Image.new("img/arrow1_sm.png")
   GameOver = Gosu::Image.new("img/gameover1static.png")
+  GameWin = Gosu::Image.new("img/youwin1.png")
 end
 
 # ======================================================================#
@@ -49,7 +50,7 @@ class MyWindow < Gosu::Window
     @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
-    Enemy.spawn_mobs(3)
+    Enemy.spawn_mobs(2)
     @hud = Hud.new
     @exit = Exit.new(576, 128)
     @game_state = "go"
@@ -129,6 +130,11 @@ class MyWindow < Gosu::Window
     MyImg::GameOver.draw(94,128,2)
   end
 
+  def gamewin_menu
+    draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
+    MyImg::GameWin.draw(94,128,2)
+  end
+
   ##############################################################
   def update
     if @game_state == "go"
@@ -196,6 +202,10 @@ class MyWindow < Gosu::Window
         if @player1.invul == true
           @player1.update_invul
         end
+        if Enemy.get_mobs.length == 0
+          # YOU WIN!!
+          @game_state = "gamewin"
+        end
       end # END IF GAME == "GO"
     @exit.update
   end # END UPDATE
@@ -214,6 +224,8 @@ class MyWindow < Gosu::Window
     @player1.draw
     if @game_state == "gameover"
       gameover_menu
+    elsif @game_state == "gamewin"
+      gamewin_menu
     end
   end
   ##############################################################
