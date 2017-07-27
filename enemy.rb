@@ -7,7 +7,7 @@ class Enemy
     @x = spawn_x
     @y = spawn_y
     @z = 1
-    @speed = 3
+    @speed = 2
     @x_vel = 0
     @y_vel = 0
     @enemy_img = Gosu::Image.new("img/eye1.png")
@@ -27,7 +27,7 @@ class Enemy
   end
 
   def change_dir
-    dir = Gosu.random(0.5,4.5).round # using 0.5 - 4.5 to balance out the round method bias
+    dir = Gosu.random(0.5,6.5).round # using 0.5 - 4.5 to balance out the round method bias
     if dir == 1 # UP
       @x_vel = 0
       @y_vel = -1 * @speed
@@ -39,6 +39,9 @@ class Enemy
       @y_vel = 0
     elsif dir == 4 # RIGHT
       @x_vel = @speed
+      @y_vel = 0
+    elsif ((dir == 5) || (dir == 6))# WAIT
+      @x_vel = 0
       @y_vel = 0
     else
       @x_vel = nil

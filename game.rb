@@ -127,6 +127,7 @@ class MyWindow < Gosu::Window
         Enemy.get_mobs.each do |mob|
           if arrow_hit?(ar, mob)
             Enemy.get_mobs.delete(mob)
+            @hud.add_score
           end
         end
         ar.update
