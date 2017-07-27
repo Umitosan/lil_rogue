@@ -2,7 +2,7 @@
 # https://gameswithcode.com/installing-gosu-on-os-x/
 
 # $ brew install sdl2 libogg libvorbis
-# $ gem inatall gosu
+# $ gem install gosu
 
 ### EXAMPLE basic window
 

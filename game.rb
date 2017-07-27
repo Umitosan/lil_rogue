@@ -24,6 +24,7 @@ module Colors
   BrightPurple = 0x80ff00ff
 end
 
+
 def draw_rect(x, y, w, h, color)
   draw_quad x, y, color, x + w, y, color,
             x, y + h, color, x + w, y + h, color
@@ -127,6 +128,7 @@ class MyWindow < Gosu::Window
         Enemy.get_mobs.each do |mob|
           if arrow_hit?(ar, mob)
             Enemy.get_mobs.delete(mob)
+            @arrows_arr.delete(ar)
             @hud.add_score
           end
         end
@@ -141,8 +143,8 @@ class MyWindow < Gosu::Window
     else
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
-    # enemy, 16.67 milisecond ~= 1 second
     Enemy.get_mobs.each do |enemy|
+      # enemy, 16.67 milisecond ~= 1 second
       if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
         enemy.change_dir
       end
@@ -162,7 +164,7 @@ class MyWindow < Gosu::Window
     Enemy.get_mobs.each { |enemy| enemy.draw }
     @player1.draw
   end
-    ##############################################################
+  ##############################################################
 end # END MyWindow
 
 

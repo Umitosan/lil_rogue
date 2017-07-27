@@ -1,7 +1,7 @@
 class Room
-  attr_accessor(:name)
+  attr_accessor()
 
-  def initialize(name)
-    @name = name
+  def initialize()
+
   end
 end

@@ -18,3 +18,8 @@
 
 # WIKI
 # https://github.com/gosu/gosu/wiki
+
+
+# Animations from forum
+
+# https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=10
