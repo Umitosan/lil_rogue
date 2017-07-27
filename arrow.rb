@@ -1,10 +1,12 @@
 class Arrow
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :angle)
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :angle, :tip_x, :tip_y)
 
   def initialize(x, y, angle)
     @x = x
     @y = y
     @z = 1
+    @tip_x = 0
+    @tip_y = 0
     @angle = angle
     @x_vel = 0
     @y_vel = 0
@@ -14,6 +16,25 @@ class Arrow
   def reset_vel
     @x_vel = 0
     @y_vel = 0
+  end
+
+  def set_tip(someAngle)
+    if someAngle == 0 # UP
+      @tip_x = @x + 32
+      @tip_y = @y
+    elsif someAngle == 180 # DOWN
+      @tip_x = @x + 32
+      @tip_y = @y + 64
+    elsif someAngle == 270 # LEFT
+      @tip_x = @x
+      @tip_y = @y + 32
+    elsif someAngle == 90 # RIGHT
+      @tip_x = @x + 64
+      @tip_y = @y + 32
+    else
+      @tip_x = 0
+      @tip_y = 0
+    end
   end
 
   def set_vel(someAngle)
@@ -36,10 +57,9 @@ class Arrow
   end
 
   def update
-    if in_bounds?
-      @x += @x_vel
-      @y += @y_vel
-    end
+    @x += @x_vel
+    @y += @y_vel
+    set_tip(@angle)
   end
 
   def in_bounds?
@@ -53,6 +73,8 @@ class Arrow
   end
 
   def draw
+    # hit box helper
+    # draw_rect(@tip_x,@tip_y,16,16,Colors::Red)
     @arrow_img.draw_rot(@x+32,@y+32,@z,@angle)
   end
 end # END ARROW CLASS

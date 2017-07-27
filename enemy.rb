@@ -56,6 +56,8 @@ class Enemy
   end
 
   def draw
+    #hit box helper
+    # draw_rect(@x+8,@y+8,48,48,Colors::Green)
     @enemy_img.draw(@x,@y,@z)
   end
 end # END ENEMY CLASS

@@ -44,7 +44,7 @@ class MyWindow < Gosu::Window
     @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
-    Enemy.spawn_mobs(3)
+    Enemy.spawn_mobs(4)
     @hud = Hud.new
     @hud.reset_hearts
   end
@@ -82,12 +82,23 @@ class MyWindow < Gosu::Window
       if (@arrows_arr.length < 3)
         myArrow = Arrow.new(@player1.x, @player1.y, @player1.angle)
         myArrow.set_vel(@player1.angle)
+        myArrow.set_tip(@player1.angle)
         @arrows_arr.push(myArrow)
       end
     else
       super
     end
   end # END BUTTON DOWN
+
+  def arrow_hit?(arrow, enemy)
+    hit = false
+    # test arrow up
+    if ( ((arrow.tip_x) > (enemy.x)) ) && ( (arrow.tip_x ) < (enemy.x+48) ) &&
+       ( (arrow.tip_y > enemy.y) ) && ( (arrow.tip_y ) < (enemy.y+48) )
+      hit = true
+    end
+    hit
+  end
 
   ##############################################################
   def update
@@ -113,6 +124,11 @@ class MyWindow < Gosu::Window
     # arrows
     @arrows_arr.each do |ar|
       if ar.in_bounds?
+        Enemy.get_mobs.each do |mob|
+          if arrow_hit?(ar, mob)
+            Enemy.get_mobs.delete(mob)
+          end
+        end
         ar.update
       else
         @arrows_arr.delete(ar)
@@ -124,7 +140,7 @@ class MyWindow < Gosu::Window
     else
       @hud.arrow_status = Gosu::Image.from_text( "--", 20 )
     end
-    ## enemy, 16.67 milisecond ~= 1 second
+    # enemy, 16.67 milisecond ~= 1 second
     Enemy.get_mobs.each do |enemy|
       if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
         enemy.change_dir
@@ -138,7 +154,9 @@ class MyWindow < Gosu::Window
     draw_wall
     @hud.draw
     if (@arrows_arr.length != 0)
-      @arrows_arr.each { |ar| ar.draw }
+      @arrows_arr.each do |ar|
+        ar.draw
+      end
     end
     Enemy.get_mobs.each { |enemy| enemy.draw }
     @player1.draw
