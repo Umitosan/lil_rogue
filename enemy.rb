@@ -24,7 +24,7 @@ class Enemy
 
   def self.spawn_mobs(num)
     num.times do |i|
-      mob = Enemy.new(WINDOW_WIDTH / 2 - 32,128)
+      mob = Enemy.new(Gosu.random(1,10)*64,Gosu.random(1,6)*64)
       @@mobs.push(mob)
     end
   end

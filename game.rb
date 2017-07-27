@@ -43,7 +43,6 @@ class MyWindow < Gosu::Window
     @arrows_arr = []
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
     @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
-    @blue1 = Gosu::Image.new("img/blue1.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
     Enemy.spawn_mobs(4)
@@ -101,6 +100,10 @@ class MyWindow < Gosu::Window
       hit = true
     end
     hit
+  end
+
+  def enemy_hit_player?(enemy)
+
   end
 
   ##############################################################
