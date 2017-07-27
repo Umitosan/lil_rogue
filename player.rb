@@ -1,5 +1,5 @@
 class Player
-  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :angle, :life)
+  attr_accessor(:x, :y, :z ,:x_vel, :y_vel, :angle, :life, :invul)
 
   def initialize(spawn_x,spawn_y,life)
     @x = spawn_x
@@ -11,7 +11,20 @@ class Player
     @player_img = Gosu::Image.new("img/archer1_xs.png")
     @life = life
     @invul = false
-    @invul_timer = 0
+    @invul_duration = 1000
+    @invul_start_time = nil
+  end
+
+  def begin_invul
+    @invul_start_time = Gosu.milliseconds
+    @invul = true
+  end
+
+  def update_invul
+    now = Gosu.milliseconds
+    if ((now - @invul_start_time) > @invul_duration)
+      @invul = false
+    end
   end
 
   def move_left

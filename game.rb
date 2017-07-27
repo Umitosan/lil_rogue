@@ -168,14 +168,20 @@ class MyWindow < Gosu::Window
       end
       if player_hit_enemy?(enemy)
         @hud.player_hit = Gosu::Image.from_text( "player hit!", 20 )
-        if @player1.life > 1
-          @player1.life -= 1
-          @hud.update_hearts(@player1.life)
-        else
-          @player.life = 6
+        if @player1.invul == false
+          @player1.begin_invul
+          if @player1.life > 1
+            @player1.life -= 1
+            @hud.update_hearts(@player1.life)
+          else
+            @player.life = 6
+          end
         end
       end
       enemy.update
+    end
+    if @player1.invul == true
+      @player1.update_invul
     end
     @exit.update
   end # END UPDATE
