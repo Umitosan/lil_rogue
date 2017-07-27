@@ -5,6 +5,7 @@ require_relative 'player'
 require_relative 'arrow'
 require_relative 'enemy'
 require_relative 'hud'
+require_relative 'heart'
 require_relative 'room'
 require_relative 'map'
 require_relative 'exit'
@@ -25,6 +26,9 @@ module Colors
   BrightPurple = 0x80ff00ff
 end
 
+module MyImg
+  Hearts = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
+end
 
 def draw_rect(x, y, w, h, color)
   draw_quad x, y, color, x + w, y, color,
@@ -44,10 +48,9 @@ class MyWindow < Gosu::Window
     @floor1 = Gosu::Image.new("img/floor_checker_1_sm.jpg", :tileable => true)
     @floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
     @wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
-    @player1 = Player.new(WINDOW_WIDTH / 2 - 32,WINDOW_HEIGHT-192)
+    @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
     Enemy.spawn_mobs(3)
     @hud = Hud.new
-    @hud.reset_hearts
     @exit = Exit.new(576, 128)
   end
 
@@ -164,8 +167,13 @@ class MyWindow < Gosu::Window
         enemy.change_dir
       end
       if player_hit_enemy?(enemy)
-        # update hearts hud
         @hud.player_hit = Gosu::Image.from_text( "player hit!", 20 )
+        if @player1.life > 1
+          @player1.life -= 1
+          @hud.update_hearts(@player1.life)
+        else
+          @player.life = 6
+        end
       end
       enemy.update
     end

@@ -10,6 +10,7 @@ class Hud
     @cur_frame = Gosu::Image.from_text( "0", 20 )
     @player_hit = Gosu::Image.from_text( "####", 20 )
     @hearts = []
+    reset_hearts
   end
 
   def add_score
@@ -21,9 +22,25 @@ class Hud
     x = 0
     y = 0
     3.times do
-      anotherHeart = Heart.new(x,y)
+      anotherHeart = Heart.new(x,y, MyImg::Hearts[0])
       @hearts.push(anotherHeart)
       x += 63
+    end
+  end
+
+  def update_hearts(life)
+    if life == 0
+      @hearts[0].image = MyImg::Hearts[2]
+    elsif life == 1
+      @hearts[0].image = MyImg::Hearts[1]
+    elsif life == 2
+      @hearts[1].image = MyImg::Hearts[2]
+    elsif life == 3
+      @hearts[1].image = MyImg::Hearts[1]
+    elsif life == 4
+      @hearts[2].image = MyImg::Hearts[2]
+    elsif life == 5
+      @hearts[2].image = MyImg::Hearts[1]
     end
   end
 
@@ -39,23 +56,4 @@ class Hud
     end
   end
 
-end # END ENEMY CLASS
-
-
-class Heart
-  attr_accessor(:x,:y,:image)
-
-  def initialize(x,y)
-    @x = x
-    @y = y
-    @z = 2
-    @image_arr = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
-    @image = @image_arr[0]
-  end
-
-  def draw
-    draw_rect(0, 0, 192, 64, Colors::LightBlk)
-    @image.draw(@x,@y,@z)
-  end
-
-end
+end # END HUD CLASS
