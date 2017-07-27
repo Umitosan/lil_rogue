@@ -52,6 +52,7 @@ class MyWindow < Gosu::Window
     Enemy.spawn_mobs(3)
     @hud = Hud.new
     @exit = Exit.new(576, 128)
+    @game_state = "go"
   end
 
   def draw_floor
@@ -118,71 +119,78 @@ class MyWindow < Gosu::Window
     hit
   end
 
+  def game_over_man
+    @game_state = "dead"
+  end
+
   ##############################################################
   def update
-    # 1 seconds timer
-    frame_count
-    ## Buttons Buttons Buttons
-    if Gosu.button_down?(Gosu::KB_LEFT)
-      @player1.move_left
-      @hud.last_btn = Gosu::Image.from_text( "LEFT", 20 )
-    end
-    if Gosu.button_down?(Gosu::KB_RIGHT)
-      @player1.move_right
-      @hud.last_btn = Gosu::Image.from_text( "RIGHT", 20 )
-    end
-    if Gosu.button_down?(Gosu::KB_UP)
-      @player1.move_up
-      @hud.last_btn = Gosu::Image.from_text( "UP", 20 )
-    end
-    if Gosu.button_down?(Gosu::KB_DOWN)
-      @player1.move_down
-      @hud.last_btn = Gosu::Image.from_text( "DOWN", 20 )
-    end
-    # arrows
-    @arrows_arr.each do |ar|
-      if ar.in_bounds?
-        Enemy.get_mobs.each do |mob|
-          if arrow_hit?(ar, mob)
-            Enemy.get_mobs.delete(mob)
-            @arrows_arr.delete(ar)
-            @hud.add_score
-          end
+    if @game_state == "go"
+        # 1 seconds timer
+        frame_count
+        ## Buttons Buttons Buttons
+        if Gosu.button_down?(Gosu::KB_LEFT)
+          @player1.move_left
+          @hud.last_btn = Gosu::Image.from_text( "LEFT", 20 )
         end
-        ar.update
-      else
-        @arrows_arr.delete(ar)
-      end
-    end
-    ## hud arrows
-    if @arrows_arr.length > 0
-      @hud.arrow_status = Gosu::Image.from_text( "Arrow OUT", 20 )
-    else
-      @hud.arrow_status = Gosu::Image.from_text( "----", 20 )
-    end
-    ## check enemy move time, enemy hit
-    Enemy.get_mobs.each do |enemy|
-      # enemy, 16.67 milisecond ~= 1 second
-      if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
-        enemy.change_dir
-      end
-      if player_hit_enemy?(enemy)
-        @hud.player_hit = Gosu::Image.from_text( "player hit!", 20 )
-        if @player1.invul == false
-          @player1.begin_invul
-          if @player1.life > 1
-            @player1.life -= 1
-            @hud.update_hearts(@player1.life)
+        if Gosu.button_down?(Gosu::KB_RIGHT)
+          @player1.move_right
+          @hud.last_btn = Gosu::Image.from_text( "RIGHT", 20 )
+        end
+        if Gosu.button_down?(Gosu::KB_UP)
+          @player1.move_up
+          @hud.last_btn = Gosu::Image.from_text( "UP", 20 )
+        end
+        if Gosu.button_down?(Gosu::KB_DOWN)
+          @player1.move_down
+          @hud.last_btn = Gosu::Image.from_text( "DOWN", 20 )
+        end
+        # arrows
+        @arrows_arr.each do |ar|
+          if ar.in_bounds?
+            Enemy.get_mobs.each do |mob|
+              if arrow_hit?(ar, mob)
+                Enemy.get_mobs.delete(mob)
+                @arrows_arr.delete(ar)
+                @hud.add_score
+              end
+            end
+            ar.update
           else
-            @player.life = 6
+            @arrows_arr.delete(ar)
           end
         end
-      end
-      enemy.update
-    end
-    if @player1.invul == true
-      @player1.update_invul
-    end
+        ## hud arrows
+        if @arrows_arr.length > 0
+          @hud.arrow_status = Gosu::Image.from_text( "Arrow OUT", 20 )
+        else
+          @hud.arrow_status = Gosu::Image.from_text( "----", 20 )
+        end
+        ## check enemy move time, enemy hit
+        Enemy.get_mobs.each do |enemy|
+          # enemy, 16.67 milisecond ~= 1 second
+          if ((Gosu.milliseconds % enemy.time_until_move) <= 16.67)
+            enemy.change_dir
+          end
+          if player_hit_enemy?(enemy)
+            @hud.player_hit = Gosu::Image.from_text( "player hit!", 20 )
+            if @player1.invul == false
+              @player1.begin_invul
+              if @player1.life > 1
+                @player1.life -= 1
+                @hud.update_hearts(@player1.life)
+              else
+                # GAME OVER!!!!!!!!
+                game_over_man
+              end
+            end
+          end
+          enemy.update
+        end
+        if @player1.invul == true
+          @player1.update_invul
+        end
+      end # END IF GAME == "GO"
     @exit.update
   end # END UPDATE
 
