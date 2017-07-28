@@ -61,6 +61,7 @@ class MyWindow < Gosu::Window
     @game_state = "start"
   end
 
+  # the built-in 'draw_quad' method is redefined for simplicity
   def draw_rect(x, y, w, h, color)
     draw_quad x, y, color, x + w, y, color,
               x, y + h, color, x + w, y + h, color
@@ -103,9 +104,7 @@ class MyWindow < Gosu::Window
         @arrows_arr.push(myArrow)
       end
     elsif (button == Gosu::KbS)
-      if @game_state == "start"
-        @game_state = "go"
-      end
+      (@game_state = "go") if (@game_state == "start")
     else
       super
     end
