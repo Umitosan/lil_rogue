@@ -31,7 +31,7 @@ module MyImg
   Floor2 = Gosu::Image.new("img/floor2.png", :tileable => true)
   Wall1 = Gosu::Image.new("img/wall1.png", :tileable => true)
   Hearts = Gosu::Image.load_tiles("img/heart1.png", 64, 64)
-  EyeStatic = Gosu::Image.new("img/eye1.png")
+  EyeStatic = Gosu::Image.new("img/eye1.png", :tileable => true)
   EyeAnim = Gosu::Image.load_tiles("img/eye2anim.png", 64, 64, tileable: true)
   Archer = Gosu::Image.new("img/archer1_xs.png")
   Arrow = Gosu::Image.new("img/arrow1_sm.png")
@@ -48,16 +48,13 @@ class MyWindow < Gosu::Window
   def initialize
     super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
     self.caption = "Little Rogue" # the caption method must come after the window creation "super()"
-    @frame = 0
-    @arrows_arr = []
-    @floor1 = MyImg::Floor1
-    @floor2 = MyImg::Floor2
-    @wall1 = MyImg::Wall1
     @welcome = MyImg::Welcome
+    @cur_room = Room.new(ROOM2)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
-    Enemy.spawn_mobs(8)
+    @arrows_arr = []
+    @frame = 0
     @hud = Hud.new
-    @exit = Exit.new(576, 128)
+    Enemy.spawn_mobs(8)
     @game_state = "start"
   end
 
@@ -65,25 +62,6 @@ class MyWindow < Gosu::Window
   def draw_rect(x, y, w, h, color)
     draw_quad x, y, color, x + w, y, color,
               x, y + h, color, x + w, y + h, color
-  end
-
-  def draw_floor
-    12.times do |i|
-      12.times do |j|
-        @floor2.draw(i*64, j*64, 0)
-      end
-    end
-  end
-
-  def draw_wall
-    corner = 0
-    12.times do |i|
-      @wall1.draw(corner, 0, 0) # top row
-      @wall1.draw(corner, 704, 0) # bottom row
-      @wall1.draw(0, corner, 0) # left row
-      @wall1.draw(704, corner, 0) # right row
-      corner += 64
-    end
   end
 
   def frame_count
@@ -222,13 +200,10 @@ class MyWindow < Gosu::Window
           @game_state = "gamewin"
         end
       end # END IF GAME == "GO"
-    @exit.update
   end # END UPDATE
 
   def draw
-    draw_floor
-    draw_wall
-    @exit.draw
+    @cur_room.draw
     @hud.draw
     if (@arrows_arr.length != 0)
       @arrows_arr.each do |ar|
