@@ -51,10 +51,10 @@ class MyWindow < Gosu::Window
     @welcome = MyImg::Welcome
     @cur_room = Room.new(ROOM2)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
-    @arrows_arr = []
-    @frame = 0
     @hud = Hud.new
-    Enemy.spawn_mobs(8)
+    @frame = 0
+    @arrows_arr = []
+    Enemy.spawn_mobs(2)
     @game_state = "start"
   end
 
@@ -71,6 +71,15 @@ class MyWindow < Gosu::Window
     @frame += 1
   end
 
+  def reset_game
+    @cur_room = Room.new(ROOM2)
+    @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
+    @hud = Hud.new
+    @frame = 0
+    @arrows_arr = []
+    Enemy.spawn_mobs(2)
+  end
+
   def button_down(button)
     if button == Gosu::KbEscape
        self.close!
@@ -82,7 +91,12 @@ class MyWindow < Gosu::Window
         @arrows_arr.push(myArrow)
       end
     elsif (button == Gosu::KbS)
-      (@game_state = "go") if (@game_state == "start")
+      if (@game_state == "start")
+        @game_state = "go"
+      elsif (@game_state == "gamewin")
+        @game_state = "go"
+        reset_game
+      end
     else
       super
     end
@@ -126,6 +140,8 @@ class MyWindow < Gosu::Window
   def gamewin_menu
     draw_rect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,Colors::Black)
     MyImg::GameWin.draw(94,128,2)
+    insertCoinTxt = Gosu::Image.from_text( " Press 'S' to play again! ", 40 )
+    insertCoinTxt.draw(WINDOW_WIDTH/2-155,WINDOW_HEIGHT/2+180,2,1,1)
   end
 
   ##############################################################
