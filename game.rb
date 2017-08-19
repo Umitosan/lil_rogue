@@ -9,6 +9,7 @@ require_relative 'heart'
 require_relative 'room'
 require_relative 'map'
 require_relative 'exit'
+require_relative 'tile'
 include Gosu
 
 WINDOW_WIDTH = 768
@@ -40,6 +41,36 @@ module MyImg
   Welcome = Gosu::Image.new("img/welcome1.png")
 end
 
+ROOM1 = [
+      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"]
+]
+
+ROOM2 = [
+      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","w1","w1","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","w1","w1","w1","w1","w1","w1","f2","f2","w1"],
+      ["w1","f2","f2","f2","w1","w1","w1","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
+      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"]
+]
+
 # ======================================================================#
 # ======================================================================#
 # ======================================================================#
@@ -49,7 +80,7 @@ class MyWindow < Gosu::Window
     super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
     self.caption = "Little Rogue" # the caption method must come after the window creation "super()"
     @welcome = MyImg::Welcome
-    @cur_room = Room.new(ROOM2)
+    @cur_room = Room.new(ROOM1)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
     @hud = Hud.new
     @frame = 0
@@ -72,7 +103,7 @@ class MyWindow < Gosu::Window
   end
 
   def reset_game
-    @cur_room = Room.new(ROOM2)
+    @cur_room = Room.new(ROOM1)
     @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
     @hud = Hud.new
     @frame = 0
@@ -244,5 +275,5 @@ end # END MyWindow
 # ======================================================================#
 # ======================================================================#
 
-
-MyWindow.new.show
+gameWindow = MyWindow.new
+gameWindow.show

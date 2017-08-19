@@ -1,59 +1,28 @@
 class Room
-  attr_accessor(:layout)
+  attr_accessor(:tiles)
 
-  def initialize(layout_arr)
-    @layout = layout_arr
-    @f1 = MyImg::Floor1
-    @f2 = MyImg::Floor2
-    @w1 = MyImg::Wall1
-    @exit = Exit.new(576, 128)
+  def initialize(blueprint)
+    @tiles = []
+    12.times do
+      row = []
+      12.times do
+        row.push("nil")
+      end
+      @tiles.push(row)
+    end
+    blueprint.each_with_index do |row, r|
+      row.each_with_index do |type_str, c|
+        @tiles[r][c] = Tile.new(type_str)
+      end
+    end
   end
 
   def draw
-    @layout.each_with_index do |tileArr, r|
+    @tiles.each_with_index do |tileArr, r|
       tileArr.each_with_index do |tile, c|
-
-        if (tile == "w1")
-          @w1.draw(c*64, r*64, 0)
-        elsif (tile == "f2")
-          @f2.draw(c*64, r*64, 0)
-        else
-          puts("no tile like that exists")
-        end
-
+        tile.img.draw(c*64, r*64, 0)
       end
     end
   end
 
 end # END Room Class
-
-
-ROOM1 = [
-      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"]
-]
-
-ROOM2 = [
-      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","w1","w1","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","w1","w1","w1","w1","w1","w1","f2","f2","w1"],
-      ["w1","f2","f2","f2","w1","w1","w1","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","f2","f2","f2","f2","f2","f2","f2","f2","f2","f2","w1"],
-      ["w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1","w1"]
-]
