@@ -11,7 +11,7 @@ class Player
     @player_img = MyImg::Archer
     @life = life
     @invul = false
-    @invul_duration = 1000
+    @invul_duration = 1400
     @invul_start_time = nil
   end
 
@@ -24,6 +24,7 @@ class Player
     now = Gosu.milliseconds
     if ((now - @invul_start_time) > @invul_duration)
       @invul = false
+      @invul_start_time = nil
     end
   end
 
@@ -53,6 +54,14 @@ class Player
   end
 
   def draw
-    @player_img.draw_rot(@x+32,@y+32,@z,@angle)
+    now = Gosu.milliseconds
+    # binding.pry
+    if @invul == true
+      if (((now - @invul_start_time) % 200) <= 100)
+        @player_img.draw_rot(@x+32,@y+32,@z,@angle)
+      end
+    elsif @invul == false
+      @player_img.draw_rot(@x+32,@y+32,@z,@angle)
+    end
   end
 end # END PLAYER CLASS
