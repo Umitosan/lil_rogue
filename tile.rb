@@ -13,9 +13,6 @@ class Tile
     elsif type == "w1"
       @img = MyImg::Wall1
       @solid = true
-    elsif type == "exit"
-      @img = Exit.new(576, 128)
-      @solid = false
     else
       nil
     end

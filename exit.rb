@@ -1,10 +1,10 @@
 class Exit
   attr_accessor(:x, :y, :z)
 
-  def initialize(spawn_x,spawn_y)
+  def initialize(spawn_x,spawn_y,spawn_z)
     @x = spawn_x
     @y = spawn_y
-    @z = 1
+    @z = spawn_z
     @exit_anim_arr = Gosu::Image.load_tiles("img/blue1anim.png", 64, 64)
     @anim_frame = 0
     @exit_cur_img = @exit_anim_arr[3]

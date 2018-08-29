@@ -50,12 +50,7 @@ class MyWindow < Gosu::Window
     super(WINDOW_WIDTH, WINDOW_HEIGHT, :fullscreen => false)
     self.caption = "Little Rogue" # the caption method must come after the window creation "super()"
     @welcome = MyImg::Welcome
-    @cur_room = Room.new(ROOM1)
-    @player1 = Player.new(WINDOW_WIDTH / 2 - 32, WINDOW_HEIGHT-192, 6)
-    @hud = Hud.new
-    @frame = 0
-    @arrows_arr = []
-    Enemy.spawn_mobs(2)
+    self.reset_game
     @game_state = "start"
   end
 
@@ -78,7 +73,7 @@ class MyWindow < Gosu::Window
     @hud = Hud.new
     @frame = 0
     @arrows_arr = []
-    Enemy.spawn_mobs(2)
+    Enemy.spawn_mobs(6)
   end
 
   def button_down(button)
@@ -150,6 +145,8 @@ class MyWindow < Gosu::Window
     if @game_state == "go"
         # 1 seconds timer
         frame_count
+        # update exit animation by updating room
+        @cur_room.update
         ## Buttons Buttons Buttons
         if Gosu.button_down?(Gosu::KB_LEFT)
           @player1.move_left

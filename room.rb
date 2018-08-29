@@ -1,8 +1,9 @@
 class Room
-  attr_accessor(:tiles)
+  attr_accessor(:tiles,:exit)
 
   def initialize(blueprint)
     @tiles = []
+    @exit = Exit.new(576, 128, 1)
     12.times do
       row = []
       12.times do
@@ -23,6 +24,11 @@ class Room
         tile.img.draw(c*64, r*64, 0)
       end
     end
+    @exit.draw
+  end
+
+  def update
+    @exit.update
   end
 
 end # END Room Class
